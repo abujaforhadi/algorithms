@@ -1,67 +1,44 @@
 #include <bits/stdc++.h>
 using namespace std;
-class Graph
-{
-    int V;
-    list<int> *adj;
-    void DFS_visit(int v, bool visited[]);
-public:
-    Graph(int V);
-    void addEdge(int v, int w);
-    void DFS(int v);
-};
+vector<int>graph[5];
+bool visited[5];
 
-Graph::Graph(int V)
+void dfs(int source)
 {
-    this->V = V;
-    adj = new list<int>[V];
-}
-
-void Graph::addEdge(int v, int w)
-{
-    adj[v].push_back(w);
-}
-
-void Graph::DFS_visit(int v, bool visited[])
-{
-
-    visited[v] = true;
-    cout << v << " ";
-    list<int>::iterator i;
-    for (i = adj[v].begin(); i != adj[v].end();i++)
+    visited[source]=1;
+    for(int i=0; i<graph[source].size(); i++)
+    {
+        int next=graph[source][i];
+        if(visited[next]==0)
         {
-            if (!visited[*i])
-            DFS_visit(*i, visited);
+            dfs(next);
         }
-}
-
-
-void Graph::DFS(int v)
-{
-
-    bool *visited = new bool[V];
-    for (int i = 0; i < V; i++)
-        visited[i] = false;
-
-
-  DFS_visit(v, visited);
+    }
 }
 
 int main()
 {
-    Graph g(4);
-    g.addEdge(0, 1);
-    g.addEdge(0, 2);
-    g.addEdge(1, 2);
-    g.addEdge(2, 0);
-    g.addEdge(2, 3);
-    g.addEdge(3, 3);
+    int node,edge;
+    cin>>node>>edge;
+    for(int i=0; i<edge; i++)
+    {
+        int u,v;
+        cin>>u>>v;
+        graph[u].push_back(v);
+        graph[v].push_back(u);
 
-    cout << "Following is Depth First Traversal \n";
-    int n;
-    cin>>n;
-    g.DFS(n);
-
-    return 0;
+    }
+    dfs(0);
+    for(int i=0; i<node; i++)
+    {
+        if(visited[i]==1)
+        {
+            cout<<"node "<<i<<" is visited"<<endl;
+        }
+        else
+        {
+            cout<<"node "<<i<<" is not visited"<<endl;
+        }
+    }
 }
 
